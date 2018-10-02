@@ -1,7 +1,14 @@
 import React, { Component } from 'react';
 import logo from '../assets/logo.svg';
+import { Icon } from 'antd';
+import PropTypes from 'prop-types';
 
 export default class Header extends Component {
+  static propTypes = {
+    isLoggedIn: PropTypes.bool.isRequired,
+    handleLogout: PropTypes.func.isRequired,
+  }
+
   render() {
     return (
       <header className="App-header">
