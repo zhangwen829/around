@@ -17,8 +17,8 @@ export default class App extends Component {
     console.log(this.state.isLoggedIn);
     return (
       <div className="App">
-        <Header handleLogout={this.handleLogout} />
-        <Main handleLogin={this.handleLogin} />
+        <Header isLoggedIn={this.state.isLoggedIn} handleLogout={this.handleLogout} />
+        <Main isLoggedIn={this.state.isLoggedIn} handleLogin={this.handleLogin} />
       </div>
     );
   }
