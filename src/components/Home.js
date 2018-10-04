@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Tabs, Button, Spin } from 'antd';
 import { GEO_OPTIONS, POS_KEY } from '../constants'
+import Gallery from './Gallery.js'
 
 const TabPane = Tabs.TabPane;
 const operations = <Button>Extra Action</Button>;
@@ -29,14 +30,12 @@ export default class Home extends Component {
   }
 
   onSuccessLoadGeoLocation = (position) => {
-    console.log(position);
-    this.setState({ loadingGeoLocation: false, err: '' });
+    this.setState({ loadingGeoLocation: false, error: '' });
     const { latitude, longitude } = position.coords;
     localStorage.setItem(POS_KEY, JSON.stringify({ lat: latitude, lon: longitude }));
   }
 
   onFailedLoadGeolocation = (error) => {
-    console.log(error);
     this.setState({ loadingGeoLocation: false, error: error.message })
   }
 
@@ -47,7 +46,7 @@ export default class Home extends Component {
       return <Spin tip="Loading geo location..." />;
     }
     else {
-      return null;
+      return <Gallery />;
     }
   }
 
