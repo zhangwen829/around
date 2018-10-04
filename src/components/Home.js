@@ -1,19 +1,33 @@
 import React, { Component } from 'react';
 import { Tabs, Button } from 'antd';
+import { GEO_OPTIONS } from '../constants'
 
 const TabPane = Tabs.TabPane;
 const operations = <Button>Extra Action</Button>;
 
 export default class Home extends Component {
   componentDidMount() {
+    this.getGeoLocation();
+  }
+
+  getGeoLocation = () => {
     if ('geolocation' in navigator) {
       navigator.geolocation.getCurrentPosition(
-        (position) => { console.log(position); },
-        (error) => { console.log(error); }
+        this.onSuccessLoadGeoLocation,
+        this.onFailedLoadGeolocation,
+        GEO_OPTIONS,
       );
     } else {
-      console.log('No Geolocation');
+      this.setState({ error: 'Your browser does not support geolocation!' });
     }
+  }
+
+  onSuccessLoadGeoLocation = (position) => {
+    console.log(position);
+  }
+
+  onFailedLoadGeolocation = (error) => {
+    console.log(error);
   }
 
   render() {
