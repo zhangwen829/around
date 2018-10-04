@@ -23,7 +23,7 @@ class LoginForm extends Component {
         }).then(
           (response) => {
             console.log(response);
-            this.props.handleLogin();
+            this.props.handleLogin(response);
           },
           (error) => { message.error(error.responseText); }
         )
