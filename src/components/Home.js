@@ -5,6 +5,17 @@ const TabPane = Tabs.TabPane;
 const operations = <Button>Extra Action</Button>;
 
 export default class Home extends Component {
+  componentDidMount() {
+    if ('geolocation' in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => { console.log(position); },
+        (error) => { console.log(error); }
+      );
+    } else {
+      console.log('No Geolocation');
+    }
+  }
+
   render() {
     return (
       <Tabs tabBarExtraContent={operations} className="main-tabs">
