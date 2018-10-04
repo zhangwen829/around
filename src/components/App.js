@@ -6,7 +6,7 @@ import { TOKEN_KEY } from '../constants.js'
 
 export default class App extends Component {
   state = {
-    isLoggedIn: false
+    isLoggedIn: !!localStorage.getItem(TOKEN_KEY)
   }
   handleLogin = (response) => {
     localStorage.setItem(TOKEN_KEY, response)
@@ -17,7 +17,6 @@ export default class App extends Component {
     this.setState({ isLoggedIn: false })
   }
   render() {
-    console.log(this.state.isLoggedIn);
     return (
       <div className="App">
         <Header isLoggedIn={this.state.isLoggedIn} handleLogout={this.handleLogout} />
