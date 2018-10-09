@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { Tabs, Button, Spin } from 'antd';
-import { GEO_OPTIONS, POS_KEY } from '../constants'
+import $ from 'jquery';
+import { GEO_OPTIONS, POS_KEY, API_ROOT, AUTH_PREFIX, TOKEN_KEY } from '../constants'
 import Gallery from './Gallery.js'
+
 
 const TabPane = Tabs.TabPane;
 const operations = <Button>Extra Action</Button>;
@@ -9,6 +11,8 @@ const operations = <Button>Extra Action</Button>;
 export default class Home extends Component {
   state = {
     loadingGeoLocation: false,
+    loadingPost: false,
+    posts: [],
     error: '',
   }
 
@@ -33,6 +37,8 @@ export default class Home extends Component {
     this.setState({ loadingGeoLocation: false, error: '' });
     const { latitude, longitude } = position.coords;
     localStorage.setItem(POS_KEY, JSON.stringify({ lat: latitude, lon: longitude }));
+    this.setState({ loadingGeoLocation: false, err: '' });
+    this.loadNearbyPost();
   }
 
   onFailedLoadGeolocation = (error) => {
@@ -44,12 +50,26 @@ export default class Home extends Component {
       return <div>{this.state.error}</div>;
     } else if (this.state.loadingGeoLocation) {
       return <Spin tip="Loading geo location..." />;
+    } else if (this.state.loadingPost) {
+      return <Spin tip="Loading nearby posts..." />;
     }
     else {
       return <Gallery images={imageList} />;
     }
   }
 
+  loadNearbyPost = () => {
+    this.setState({ loadingPost: true });
+    const { lat, lon } = JSON.parse(localStorage.getItem(POS_KEY));
+    const token = localStorage.getItem(TOKEN_KEY);
+    $.ajax({
+      url: `${API_ROOT}/search?lat=${lat}&lon=${lon}&range=20`,
+      headers: {
+        Authorization: `${AUTH_PREFIX} ${token}`
+      }
+    })
+
+  }
 
   render() {
     return (
