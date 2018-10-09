@@ -1,5 +1,8 @@
 import React from 'react';
-import { Button, Modal } from 'antd';
+import { Button, Modal, message } from 'antd';
+import $ from 'jquery';
+import { POS_KEY, API_ROOT, AUTH_PREFIX, TOKEN_KEY } from '../constants'
+import WrappedCreatePostForm from './CreatePostForm.js'
 
 export default class CreatePostButton extends React.Component {
   state = { visible: false }
@@ -12,17 +15,51 @@ export default class CreatePostButton extends React.Component {
   }
 
   handleOk = (e) => {
-    console.log(e);
-    this.setState({
-      visible: false,
+    this.setState({ confirmLoading: true });
+    this.form.validateFields((err, values) => {
+      if (!err) {
+        const { lat, lon } = JSON.parse(localStorage.getItem(POS_KEY));
+        const formData = new FormData();
+        formData.set('lat', lat);
+        formData.set('lon', lon);
+        formData.set('message', values.message);
+        formData.set('image', values.image[0].originFileObj);
+
+        $.ajax({
+          url: `${API_ROOT}/post`,
+          method: 'POST',
+          data: formData,
+          headers: {
+            Authorization: `${AUTH_PREFIX} ${localStorage.getItem(TOKEN_KEY)}`,
+          },
+          processData: false,
+          contentType: false,
+          dataType: 'text',
+        }).then((response) => {
+          message.success('Created a post successfully!');
+          this.form.resetFields();
+          this.setState({ visible: false, confirmLoading: false });
+          this.props.loadNearbyPost();
+        }, (response) => {
+          message.error(response.responseText);
+          this.setState({ visible: false, confirmLoading: false });
+        }).catch((error) => {
+          console.log(error);
+        });
+      }
     });
   }
+
 
   handleCancel = (e) => {
     console.log(e);
     this.setState({
       visible: false,
     });
+  }
+
+  saveFormRef = (form) => {
+    this.form = form;
   }
 
   render() {
@@ -36,9 +73,7 @@ export default class CreatePostButton extends React.Component {
           onOk={this.handleOk}
           onCancel={this.handleCancel}
         >
-          <p>Some contents...</p>
-          <p>Some contents...</p>
-          <p>Some contents...</p>
+          <WrappedCreatePostForm ref={this.saveFormRef} />
         </Modal>
       </div >
     )

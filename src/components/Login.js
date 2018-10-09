@@ -12,7 +12,6 @@ class LoginForm extends Component {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        console.log('Received values of form: ', values);
         $.ajax({
           url: `${API_ROOT}/login`,
           method: 'POST',
@@ -22,7 +21,6 @@ class LoginForm extends Component {
           })
         }).then(
           (response) => {
-            console.log(response);
             this.props.handleLogin(response);
           },
           (error) => { message.error(error.responseText); }

@@ -76,13 +76,12 @@ export default class Home extends Component {
     const { lat, lon } = JSON.parse(localStorage.getItem(POS_KEY));
     const token = localStorage.getItem(TOKEN_KEY);
     $.ajax({
-      url: `${API_ROOT}/search?lat=${lat}&lon=${lon}&range=20000`,
+      url: `${API_ROOT}/search?lat=${lat}&lon=${lon}&range=20`,
       headers: {
         Authorization: `${AUTH_PREFIX} ${token}`
       }
     }).then((response) => {
       this.setState({ posts: response, loadingPost: false });
-      console.log(response);
     }, (response) => {
       this.setState({ error: response.responseText });
     }).catch((error) => {
@@ -92,7 +91,7 @@ export default class Home extends Component {
 
 
   render() {
-    const createPostButton = <CreatePostButton loadNearbyPosts={this.loadNearbyPosts} />;
+    const createPostButton = <CreatePostButton loadNearbyPost={this.loadNearbyPost} />;
     return (
       <Tabs tabBarExtraContent={createPostButton} className="main-tabs">
         <TabPane tab="Posts" key="1"> {this.getGalleryPanelContent()}
