@@ -1,6 +1,7 @@
 import React from 'react';
-import { withScriptjs, withGoogleMap, GoogleMap, Marker } from 'react-google-maps';
+import { withScriptjs, withGoogleMap, GoogleMap } from 'react-google-maps';
 import { POS_KEY } from '../constants';
+import { AroundMarker } from './AroundMarker.js';
 
 class AroundMap extends React.Component {
   reloadMarkers = () => {
@@ -43,9 +44,7 @@ class AroundMap extends React.Component {
       >
         {
           this.props.posts.map(
-            (post) => (<Marker
-              key={post.url}
-              position={{ lat: post.location.lat, lng: post.location.lon }} />)
+            (post) => (<AroundMarker key={post.url} post={post} />)
           )
         }
       </GoogleMap>
