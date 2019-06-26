@@ -65,7 +65,7 @@ export default class CreatePostButton extends React.Component {
   render() {
     return (
       < div >
-        <Button type="primary" onClick={this.showModal}>CreatePostButton</Button>
+        <Button type="primary" onClick={this.showModal}>Create Post</Button>
         <Modal
           title="Basic Modal"
           visible={this.state.visible}

@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import { Tabs, Spin } from 'antd';
 import $ from 'jquery';
-import { GEO_OPTIONS, POS_KEY, API_ROOT, AUTH_PREFIX, TOKEN_KEY } from '../constants'
-import Gallery from './Gallery.js'
-import CreatePostButton from './CreatePostButton'
+import { GEO_OPTIONS, POS_KEY, API_ROOT, AUTH_PREFIX, TOKEN_KEY } from '../constants';
+import Gallery from './Gallery.js';
+import CreatePostButton from './CreatePostButton.js';
+import { WrappedAroundMap } from './AroundMap.js';
+
 
 
 const TabPane = Tabs.TabPane;
@@ -96,7 +98,12 @@ export default class Home extends Component {
       <Tabs tabBarExtraContent={createPostButton} className="main-tabs">
         <TabPane tab="Posts" key="1"> {this.getGalleryPanelContent()}
         </TabPane>
-        <TabPane tab="Map" key="2">Content of Tab Pane 2</TabPane>
+        <TabPane tab="Map" key="2"><WrappedAroundMap
+          googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyD3CEh9DXuyjozqptVB5LA-dN7MxWWkr9s&v=3.exp&libraries=geometry,drawing,places"
+          loadingElement={<div style={{ height: `100%` }} />}
+          containerElement={<div style={{ height: `600px` }} />}
+          mapElement={<div style={{ height: `100%` }} />}
+        /></TabPane>
       </Tabs>
     )
   }
