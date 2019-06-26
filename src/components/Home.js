@@ -40,7 +40,7 @@ export default class Home extends Component {
     const { latitude, longitude } = position.coords;
     localStorage.setItem(POS_KEY, JSON.stringify({ lat: latitude, lon: longitude }));
     this.setState({ loadingGeoLocation: false, err: '' });
-    this.loadNearbyPost();
+    this.loadNearbyPosts();
   }
 
   onFailedLoadGeolocation = (error) => {
@@ -73,12 +73,13 @@ export default class Home extends Component {
     }
   }
 
-  loadNearbyPost = () => {
+  loadNearbyPosts = (location, range) => {
     this.setState({ loadingPost: true });
-    const { lat, lon } = JSON.parse(localStorage.getItem(POS_KEY));
+    const { lat, lon } = location || JSON.parse(localStorage.getItem(POS_KEY));
+    const radis = range || 20;
     const token = localStorage.getItem(TOKEN_KEY);
     $.ajax({
-      url: `${API_ROOT}/search?lat=${lat}&lon=${lon}&range=20`,
+      url: `${API_ROOT}/search?lat=${lat}&lon=${lon}&range=${radis}`,
       headers: {
         Authorization: `${AUTH_PREFIX} ${token}`
       }
@@ -93,7 +94,7 @@ export default class Home extends Component {
 
 
   render() {
-    const createPostButton = <CreatePostButton loadNearbyPost={this.loadNearbyPost} />;
+    const createPostButton = <CreatePostButton loadNearbyPosts={this.loadNearbyPosts} />;
     return (
       <Tabs tabBarExtraContent={createPostButton} className="main-tabs">
         <TabPane tab="Posts" key="1"> {this.getGalleryPanelContent()}
@@ -104,6 +105,8 @@ export default class Home extends Component {
           containerElement={<div style={{ height: `600px` }} />}
           mapElement={<div style={{ height: `100%` }} />}
           posts={this.state.posts}
+          loadNearbyPosts={this.loadNearbyPosts}
+
         /></TabPane>
       </Tabs>
     )
