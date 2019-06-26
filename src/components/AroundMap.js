@@ -1,14 +1,21 @@
 import React from 'react';
 import { withScriptjs, withGoogleMap, GoogleMap, Marker } from 'react-google-maps';
+import { POS_KEY } from '../constants';
 
 class AroundMap extends React.Component {
   render() {
+    const { lat, lon } = JSON.parse(localStorage.getItem(POS_KEY));
+    
     return (
       <GoogleMap
-        defaultZoom={8}
-        defaultCenter={{ lat: -34.397, lng: 150.644 }}
+        defaultZoom={10}
+        defaultCenter={{ lat: lat, lng: lon }}
       >
-        <Marker position={{ lat: -34.397, lng: 150.644 }} />
+        {
+          this.props.posts.map(
+            (post) => (<Marker position={{ lat: post.location.lat, lng: post.location.lon }} />)
+          )
+        }
       </GoogleMap>
     );
   }

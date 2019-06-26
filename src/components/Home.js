@@ -83,7 +83,7 @@ export default class Home extends Component {
         Authorization: `${AUTH_PREFIX} ${token}`
       }
     }).then((response) => {
-      this.setState({ posts: response, loadingPost: false });
+      this.setState({ posts: response || [], loadingPost: false });
     }, (response) => {
       this.setState({ error: response.responseText });
     }).catch((error) => {
@@ -103,6 +103,7 @@ export default class Home extends Component {
           loadingElement={<div style={{ height: `100%` }} />}
           containerElement={<div style={{ height: `600px` }} />}
           mapElement={<div style={{ height: `100%` }} />}
+          posts={this.state.posts}
         /></TabPane>
       </Tabs>
     )
