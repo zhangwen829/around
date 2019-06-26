@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Modal, message } from 'antd';
 import $ from 'jquery';
-import { POS_KEY, API_ROOT, AUTH_PREFIX, TOKEN_KEY } from '../constants'
+import { POS_KEY, API_ROOT, AUTH_PREFIX, TOKEN_KEY, LOC_SHAKE } from '../constants'
 import WrappedCreatePostForm from './CreatePostForm.js'
 
 export default class CreatePostButton extends React.Component {
@@ -20,8 +20,9 @@ export default class CreatePostButton extends React.Component {
       if (!err) {
         const { lat, lon } = JSON.parse(localStorage.getItem(POS_KEY));
         const formData = new FormData();
-        formData.set('lat', lat);
-        formData.set('lon', lon);
+        // -0.02 ~ +0.02 so that markers does not overlap
+        formData.set('lat', lat + Math.random() * 2 * LOC_SHAKE - LOC_SHAKE);
+        formData.set('lon', lon + Math.random() * 2 * LOC_SHAKE - LOC_SHAKE);
         formData.set('message', values.message);
         formData.set('image', values.image[0].originFileObj);
 
